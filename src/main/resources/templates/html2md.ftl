@@ -8,7 +8,7 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
-    <script src="http://cdn.bootcss.com/jquery/2.0.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/2.0.1/jquery.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
