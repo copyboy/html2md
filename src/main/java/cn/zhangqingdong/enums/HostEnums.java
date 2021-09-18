@@ -11,26 +11,36 @@ import java.net.URL;
  */
 public enum HostEnums {
 
-    CSDN("https://blog.csdn.net/", "article_content"),
-    CNBLOG("https://www.cnblogs.com/", "post_detail"),
-    WECHAT("https://mp.weixin.qq.com", "img-content"),
-    UNKNOWN("UNKNOWN", "UNKNOWN"),
+    CSDN("https://blog.csdn.net/", "id","article_content"),
+    CNBLOG("https://www.cnblogs.com/", "id","post_detail"),
+    WECHAT("https://mp.weixin.qq.com/", "id","img-content"),
+    /**
+     * 暂不支持, 需要抓取异步返回数据
+     */
+    BILIBILI("https://www.bilibili.com/", "css","article-container"),
+    UNKNOWN("UNKNOWN", "UNKNOWN","body"),
     ;
 
     private String url;
-    private String pageContentId;
+    private String contentType;
+    private String pageDiv;
 
-    HostEnums(String url, String pageContentId) {
+    HostEnums(String url, String contentType, String pageDiv) {
         this.url = url;
-        this.pageContentId = pageContentId;
+        this.contentType = contentType;
+        this.pageDiv = pageDiv;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public String getPageContentId() {
-        return pageContentId;
+    public String getContentType() {
+        return contentType;
+    }
+
+    public String getPageDiv() {
+        return pageDiv;
     }
 
     public static HostEnums position(URL uri) {

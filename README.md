@@ -8,6 +8,17 @@
 - 在 HostEnums 中添加站点枚举值,并获取页面内容的 id 值
 
 
+> 暂时不支持的站点
+
+- 掘金 : 前后端分离,正文内容需要等待页面全部加载完成
+- 简书 : class 元素定位正文内容
+- Bilibili : 前后端分离，需要处理json返回值
+
+https://www.bilibili.com/read/cv10393214/
+ 
+
+
+
 
 ### 项目启动
 启动项目之后，在浏览器输入网址`http://localhost:8090/tool/html2md`

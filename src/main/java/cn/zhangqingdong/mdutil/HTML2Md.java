@@ -40,9 +40,14 @@ public class HTML2Md {
 
             // 通用格式化
             HostEnums host = HostEnums.position(url);
-            Element ele = doc.getElementById(host.getPageContentId());
-            ele.getElementsByTag("script").remove();
-
+            Element ele;
+            if ("id".equalsIgnoreCase(host.getContentType())) {
+                ele = doc.getElementById(host.getPageDiv());
+            } else if ("css".equalsIgnoreCase(host.getContentType())){
+                ele = doc.select("."+host.getPageDiv()).get(0);
+            } else {
+                ele = doc.getElementsByTag(host.getPageDiv()).get(0);
+            }
             // 再针对不同站点 处理额外的标签内容，再使用处理完之后的内容，
             handlerWebSite(host, ele);
 
@@ -94,14 +99,16 @@ public class HTML2Md {
     }
 
     private static void handleCsdn(Element content) {
+        content.getElementsByTag("script").remove();
         content.select(".dp-highlighter").remove();
     }
 
     private static void handleCnblog(Element content) {
-
+        content.getElementsByTag("script").remove();
     }
 
     private static void handleWechat(Element content) {
+        content.getElementsByTag("script").remove();
         // 图片标签显示
         long count = content.getElementsByTag("img").stream().peek(e -> {
             e.attr("src", e.attr("data-src"));
@@ -110,30 +117,6 @@ public class HTML2Md {
         // 正文内容展示
         content.getElementById("js_content").attr("style", "visibility");
     }
-
-    public static String convertHtml4csdn(String html, String charset) {
-        Document doc = Jsoup.parse(html, charset);
-        Element content = doc.select("#article_content").get(0);
-        content.select(".dp-highlighter").remove();
-        Document parse = Jsoup.parse(content.html());
-        return getTextContent(parse);
-    }
-
-    public static String convertHtml4Wechat(String html, String charset) {
-        Document doc = Jsoup.parse(html, charset);
-        Element content = doc.getElementById("#img-content");
-        // 图片显示
-        long count = content.getElementsByTag("img").stream().peek(e -> {
-            e.attr("src", e.attr("data-src"));
-        }).count();
-        System.out.println("共计 " + count + " 张图片被处理");
-        // 正文内容展示
-        content.getElementById("js_content").attr("style", "visibility");
-
-        Document parse = Jsoup.parse(content.html());
-        return getTextContent(parse);
-    }
-
 
     public static String convert(String theHTML, String baseURL) {
         Document doc = Jsoup.parse(theHTML, baseURL);
