@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Controller
 @RequestMapping("/tool")
+@CrossOrigin
 public class ApiController {
 
     @Resource
