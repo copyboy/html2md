@@ -4,6 +4,7 @@ import cn.zhangqingdong.dto.BaseResp;
 import cn.zhangqingdong.dto.ParamVo;
 import cn.zhangqingdong.enums.ResultStatus;
 import cn.zhangqingdong.service.Common2mdService;
+import cn.zhangqingdong.util.DateUtil;
 import cn.zhangqingdong.util.ZipUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -87,22 +88,45 @@ public class ApiController {
             e.printStackTrace();
         }
     }
+    @RequestMapping(value = "/batchDownload", method = RequestMethod.GET)
+    public HttpServletResponse batchDownload(@RequestParam(name = "url") String urls,
+                         HttpServletResponse response) {
+
+        try {
+
+            List<File> zipFiles = common2mdService.batchDownload(urls.split(","));
+
+            File fileA = new File(DateUtil.dateToStringWithPattern(new Date(), "yyyyMMddHHmmsssss") +".zip");
+            if (!fileA.exists()) {
+                fileA.createNewFile();
+            }
+            response.reset();
+            //response.getWriter()
+            //创建文件输出流
+            FileOutputStream fousa = new FileOutputStream(fileA);
+            ZipOutputStream zipOutA = new ZipOutputStream(fousa);
+            ZipUtils.zipFile(zipFiles, zipOutA);
+            zipOutA.close();
+            fousa.close();
+            return ZipUtils.downloadZip(fileA, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
     @RequestMapping(value = "/downloadCategory", method = RequestMethod.GET)
     public HttpServletResponse downloadCategory(@RequestParam(name = "url") String url,
                                                 HttpServletResponse response) {
-        // https://blog.csdn.net/qq_37771475/category_8584136.html
+        //ex. https://blog.csdn.net/qq_37771475/category_8584136.html
 
         String[] uri = url.split("/");
         String author = uri[3];
         List<File> zipFiles = null;
-        try {
-            zipFiles = common2mdService.downloadZipFiles(new URL(url));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
         //打包凭证.zip与EXCEL一起打包
         try {
+
+            zipFiles = common2mdService.downloadZipFiles(new URL(url));
+
             File fileA = new File(author+".zip");
             if (!fileA.exists()) {
                 fileA.createNewFile();

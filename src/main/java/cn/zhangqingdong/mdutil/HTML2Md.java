@@ -58,6 +58,7 @@ public class HTML2Md {
 
             Document parse = Jsoup.parse(ele.html());
             content = getTextContent(parse);
+            content += "\n \n [原文地址]("+url+") ";
         } catch (IOException e) {
             e.printStackTrace();
         }

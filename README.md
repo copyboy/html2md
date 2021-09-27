@@ -3,6 +3,7 @@
 - 已支持 CSDN,CNBLOG,微信公众号文章
 - CNBLOG 自定义css样式较多,如果md格式有误,大多数是代码块,请使用html格式,或直接复制页面
 - 支持 CSDN 分类专栏文章下载,格式如 https://blog.csdn.net/qq_37771475/category_8584136.html
+- 支持批量下载CSDN,CNBLOG,微信公众号文章, 以逗号分隔多个URL
 
 ### 扩展其它站点支持
 

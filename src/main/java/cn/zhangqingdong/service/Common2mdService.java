@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,22 @@ public class Common2mdService {
     public ImmutablePair<String,String> convert2HtmlWithTitle(URL url) {
         return HTML2Md.convert(url, "utf-8", true, true);
     }
+    public List<File> batchDownload(String[] urls) {
 
-    //
+        ImmutablePair<String, String> pair;
+        List<File> mdFiles = new ArrayList<>();
+        for (String url : urls) {
+            try {
+                pair = HTML2Md.convert(new URL(url), "utf-8", true, false);
+                mdFiles.add(generateFile(pair));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return mdFiles;
+    }
+
 
     /**
      * 下载 CSDN 类别下的所有文章
