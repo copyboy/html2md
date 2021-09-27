@@ -39,6 +39,7 @@
                     <button type="submit" id="submitBtnHtml" onclick="convert('html')" class="btn btn-large btn-primary">转换HTML</button>
                     <button type="submit" id="downloadBtnMd" onclick="download('md')" class="btn btn-large btn-success">下载Markdown</button>
                     <button type="submit" id="downloadBtnHtml" onclick="download('html')" class="btn btn-large btn-success">下载Html</button>
+                    <button type="submit" id="downloadBtnHtml" onclick="downloadCategory()" class="btn btn-large btn-success">批量下载CSDN分类专栏</button>
                 </div>
                 <div class="form-group col-md-12">
                     <label>HTML/Markdown格式 源代码</label>
@@ -71,6 +72,12 @@
         var url = $("#blogUrl").val();
         console.log(path+"?type="+type+"&&"+"url="+url);
         window.open(path+"?type="+type+"&&"+"url="+url);
+    }
+    function downloadCategory() {
+        var path = document.getElementById("base").href.replace('html2md','downloadCategory');
+        var url = $("#blogUrl").val();
+        console.log(path+"?url="+url);
+        window.open(path+"?url="+url);
     }
 </script>
 </body>

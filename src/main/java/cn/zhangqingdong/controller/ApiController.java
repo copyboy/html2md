@@ -1,18 +1,24 @@
 package cn.zhangqingdong.controller;
 
-import cn.zhangqingdong.service.Common2mdService;
 import cn.zhangqingdong.dto.BaseResp;
 import cn.zhangqingdong.dto.ParamVo;
 import cn.zhangqingdong.enums.ResultStatus;
+import cn.zhangqingdong.service.Common2mdService;
+import cn.zhangqingdong.util.ZipUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Api 入口
@@ -81,4 +87,39 @@ public class ApiController {
             e.printStackTrace();
         }
     }
+    @RequestMapping(value = "/downloadCategory", method = RequestMethod.GET)
+    public HttpServletResponse downloadCategory(@RequestParam(name = "url") String url,
+                                                HttpServletResponse response) {
+        // https://blog.csdn.net/qq_37771475/category_8584136.html
+
+        String[] uri = url.split("/");
+        String author = uri[3];
+        List<File> zipFiles = null;
+        try {
+            zipFiles = common2mdService.downloadZipFiles(new URL(url));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //打包凭证.zip与EXCEL一起打包
+        try {
+            File fileA = new File(author+".zip");
+            if (!fileA.exists()) {
+                fileA.createNewFile();
+            }
+            response.reset();
+            //response.getWriter()
+            //创建文件输出流
+            FileOutputStream fousa = new FileOutputStream(fileA);
+            ZipOutputStream zipOutA = new ZipOutputStream(fousa);
+            ZipUtils.zipFile(zipFiles, zipOutA);
+            zipOutA.close();
+            fousa.close();
+            return ZipUtils.downloadZip(fileA, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
 }
